@@ -42,3 +42,84 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+/node_modules
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# env files (can opt-in for committing if needed)
+.env*
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
+
+# backend
+backend/node_modules
+backend/.pnp
+backend/.pnp.*
+backend/.yarn/*
+backend/.yarn/patches
+backend/.yarn/plugins
+backend/.yarn/releases
+backend/.yarn/versions
+
+# testing
+backend/coverage
+
+# next.js
+backend/.next/
+backend/out/
+
+# production
+backend/build
+
+# misc
+backend/.DS_Store
+backend/*.pem
+
+# debug
+backend/npm-debug.log*
+backend/yarn-debug.log*
+backend/yarn-error.log*
+backend/.pnpm-debug.log*
+
+# env files (can opt-in for committing if needed)
+backend/.env*
+
+# vercel
+backend/.vercel
+
+# typescript
+backend/*.tsbuildinfo
+backend/next-env.d.ts
