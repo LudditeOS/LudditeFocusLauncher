@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 import { BaseappService } from './baseapp.service';
 import { WebApp } from '../models/webapp.interface';
-import { AuthService } from './auth.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class WebAppListService extends BaseappService<WebApp> {
   protected get STORAGE_KEY(): string {
@@ -15,7 +14,7 @@ export class WebAppListService extends BaseappService<WebApp> {
     return 'http://195.15.192.3:3000/api/webapps';
   }
 
-  constructor(protected override authService: AuthService) {
-    super(authService);
+  constructor() {
+    super();
   }
 }

@@ -4,7 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { CapacitorHttp } from '@capacitor/core';
 import { Router } from '@angular/router';
 import { AppListService } from '../../services/applist.service';
-import { AuthService } from '../../services/auth.service';
 
 interface WishlistItem {
   name: string;
@@ -25,22 +24,32 @@ interface WishlistItem {
             class="p-2 mr-4 rounded-full text-gray-600 hover:bg-gray-100 transition-colors border border-gray-200"
             aria-label="Go back"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-6 h-6"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"
+              />
             </svg>
           </button>
           <h1 class="text-xl font-bold text-gray-900">Luddite Settings</h1>
-
-          <div class="ml-auto flex items-center">
-            <span *ngIf="currentUser" class="text-sm text-gray-600">{{currentUser.username}}</span>
-          </div>
         </div>
       </div>
 
-      <div class="max-w-md mx-auto bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
+      <div
+        class="max-w-md mx-auto bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6"
+      >
         <h2 class="text-lg font-semibold mb-4 text-gray-900">Sync App Data</h2>
         <p class="text-sm text-gray-600 mb-4">
-          Sync all application data with the server to get the latest available apps and updates.
+          Sync all application data with the server to get the latest available
+          apps and updates.
         </p>
 
         <button
@@ -49,38 +58,90 @@ interface WishlistItem {
           [disabled]="isSyncing"
         >
           <span *ngIf="isSyncing" class="mr-2">
-            <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            <svg
+              class="animate-spin h-5 w-5 text-white"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                class="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                stroke-width="4"
+              ></circle>
+              <path
+                class="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+              ></path>
             </svg>
           </span>
           {{ isSyncing ? 'Syncing...' : 'Sync Now' }}
         </button>
 
-        <div *ngIf="syncSuccess" class="mt-4 bg-green-50 border border-green-200 rounded-lg p-3 text-sm text-green-800">
+        <div
+          *ngIf="syncSuccess"
+          class="mt-4 bg-green-50 border border-green-200 rounded-lg p-3 text-sm text-green-800"
+        >
           <div class="flex items-center">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2 text-green-500">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-5 h-5 mr-2 text-green-500"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
             </svg>
             <p>App data successfully synced!</p>
           </div>
         </div>
 
-        <div *ngIf="syncError" class="mt-4 bg-red-50 border border-red-200 rounded-lg p-3 text-sm text-red-800">
+        <div
+          *ngIf="syncError"
+          class="mt-4 bg-red-50 border border-red-200 rounded-lg p-3 text-sm text-red-800"
+        >
           <div class="flex items-center">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2 text-red-500">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-5 h-5 mr-2 text-red-500"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"
+              />
             </svg>
             <p>{{ syncErrorMessage }}</p>
           </div>
         </div>
       </div>
 
-      <div class="max-w-md mx-auto bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
-        <h2 class="text-lg font-semibold mb-6 text-gray-900">Submit Website Suggestion</h2>
+      <div
+        class="max-w-md mx-auto bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6"
+      >
+        <h2 class="text-lg font-semibold mb-6 text-gray-900">
+          Submit Website Suggestion
+        </h2>
         <form (ngSubmit)="submitWishlistItem()">
           <div class="mb-5">
-            <label for="name" class="block mb-2 text-sm font-medium text-gray-700">Website Name</label>
+            <label
+              for="name"
+              class="block mb-2 text-sm font-medium text-gray-700"
+              >Website Name</label
+            >
             <input
               type="text"
               id="name"
@@ -89,11 +150,15 @@ interface WishlistItem {
               required
               class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               placeholder="Enter website name"
-            >
+            />
           </div>
 
           <div class="mb-5">
-            <label for="url" class="block mb-2 text-sm font-medium text-gray-700">Website URL</label>
+            <label
+              for="url"
+              class="block mb-2 text-sm font-medium text-gray-700"
+              >Website URL</label
+            >
             <input
               type="url"
               id="url"
@@ -102,11 +167,15 @@ interface WishlistItem {
               required
               class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               placeholder="https://example.com"
-            >
+            />
           </div>
 
           <div class="mb-5">
-            <label for="comment" class="block mb-2 text-sm font-medium text-gray-700">Comment (Optional)</label>
+            <label
+              for="comment"
+              class="block mb-2 text-sm font-medium text-gray-700"
+              >Comment (Optional)</label
+            >
             <textarea
               id="comment"
               name="comment"
@@ -124,9 +193,25 @@ interface WishlistItem {
           >
             <div class="flex items-center justify-center">
               <span *ngIf="isSubmitting" class="mr-2">
-                <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                <svg
+                  class="animate-spin h-5 w-5 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    class="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    stroke-width="4"
+                  ></circle>
+                  <path
+                    class="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
                 </svg>
               </span>
               {{ isSubmitting ? 'Submitting...' : 'Submit Suggestion' }}
@@ -134,52 +219,60 @@ interface WishlistItem {
           </button>
         </form>
 
-        <div *ngIf="submitSuccess" class="mt-6 bg-green-50 border border-green-200 rounded-lg p-4 text-sm text-green-800">
+        <div
+          *ngIf="submitSuccess"
+          class="mt-6 bg-green-50 border border-green-200 rounded-lg p-4 text-sm text-green-800"
+        >
           <div class="flex items-center">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2 text-green-500">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-5 h-5 mr-2 text-green-500"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
             </svg>
             <p>Your suggestion was submitted successfully!</p>
           </div>
         </div>
 
-        <div *ngIf="submitError" class="mt-6 bg-red-50 border border-red-200 rounded-lg p-4 text-sm text-red-800">
+        <div
+          *ngIf="submitError"
+          class="mt-6 bg-red-50 border border-red-200 rounded-lg p-4 text-sm text-red-800"
+        >
           <div class="flex items-center">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2 text-red-500">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-5 h-5 mr-2 text-red-500"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"
+              />
             </svg>
             <p>{{ errorMessage }}</p>
           </div>
         </div>
       </div>
-
-      <div class="max-w-md mx-auto bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
-        <h2 class="text-lg font-semibold mb-4 text-gray-900">Account</h2>
-
-        <div class="flex items-center justify-between">
-          <div>
-            <p class="text-sm text-gray-600">Signed in as <span class="font-medium text-gray-900">{{currentUser?.username || 'Guest'}}</span></p>
-          </div>
-
-          <button
-            (click)="logout()"
-            class="flex items-center justify-center bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg px-4 py-2 transition-colors focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
-            </svg>
-            Sign Out
-          </button>
-        </div>
-      </div>
     </div>
-  `
+  `,
 })
 export class SettingsComponent {
   wishlistItem: WishlistItem = {
     name: '',
     url: '',
-    comment: ''
+    comment: '',
   };
 
   isSubmitting = false;
@@ -192,24 +285,10 @@ export class SettingsComponent {
   syncError = false;
   syncErrorMessage = '';
 
-  currentUser: { username: string } | null = null;
-
-  constructor(
-    private router: Router,
-    private appListService: AppListService,
-    private authService: AuthService
-  ) {
-    this.authService.currentUser$.subscribe(user => {
-      this.currentUser = user;
-    });
-  }
+  constructor(private router: Router, private appListService: AppListService) {}
 
   goBack() {
     this.router.navigate(['']);
-  }
-
-  logout() {
-    this.authService.logout();
   }
 
   async submitWishlistItem() {
@@ -224,15 +303,12 @@ export class SettingsComponent {
     this.submitError = false;
 
     try {
-      const token = await this.authService.getToken();
-
       const response = await CapacitorHttp.post({
         url: 'http://195.15.192.3:3000/api/wishlist',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': token ? `Bearer ${token}` : ''
         },
-        data: this.wishlistItem
+        data: this.wishlistItem,
       });
 
       if (response.status === 201) {
@@ -240,7 +316,7 @@ export class SettingsComponent {
         this.wishlistItem = {
           name: '',
           url: '',
-          comment: ''
+          comment: '',
         };
       } else {
         throw new Error(`Server responded with status: ${response.status}`);
@@ -248,7 +324,7 @@ export class SettingsComponent {
     } catch (error) {
       console.error('Error submitting wishlist item:', error);
       this.submitError = true;
-      this.errorMessage = 'Failed to submit suggestion. Please try again later.';
+      this.errorMessage = 'Failed to submit. Please try again later.';
     } finally {
       this.isSubmitting = false;
     }
@@ -260,21 +336,19 @@ export class SettingsComponent {
     this.syncError = false;
 
     this.appListService.syncAll().subscribe({
-      next: (apps) => {
-        console.log('Successfully synced all app data:', apps.length, 'apps found');
-        this.syncSuccess = true;
+      next: () => {
         this.isSyncing = false;
-
+        this.syncSuccess = true;
         setTimeout(() => {
           this.syncSuccess = false;
         }, 3000);
       },
       error: (error) => {
-        console.error('Error syncing app data:', error);
-        this.syncError = true;
-        this.syncErrorMessage = 'Failed to sync app data. Please check your connection and try again.';
+        console.error('Error syncing apps:', error);
         this.isSyncing = false;
-      }
+        this.syncError = true;
+        this.syncErrorMessage = 'Failed to sync data. Please try again later.';
+      },
     });
   }
 }

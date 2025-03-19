@@ -1,8 +1,7 @@
 import { BehaviorSubject, Observable, from } from 'rxjs';
-import { catchError, map, tap, switchMap } from 'rxjs/operators';
+import { catchError, map, tap } from 'rxjs/operators';
 import { Preferences } from '@capacitor/preferences';
 import { CapacitorHttp } from '@capacitor/core';
-import { AuthService } from './auth.service';
 import { Injectable } from '@angular/core';
 
 @Injectable()
@@ -13,7 +12,7 @@ export abstract class BaseappService<T> {
   private appsSubject = new BehaviorSubject<T[]>([]);
   public apps$ = this.appsSubject.asObservable();
 
-  constructor(protected authService: AuthService) {
+  constructor() {
     this.loadFromStorage();
   }
 
@@ -29,7 +28,10 @@ export abstract class BaseappService<T> {
         this.appsSubject.next(apps);
       }
     } catch (error) {
-      console.error(`Error loading apps from storage (${this.STORAGE_KEY}):`, error);
+      console.error(
+        `Error loading apps from storage (${this.STORAGE_KEY}):`,
+        error
+      );
     }
   }
 
@@ -37,11 +39,14 @@ export abstract class BaseappService<T> {
     try {
       await Preferences.set({
         key: this.STORAGE_KEY,
-        value: JSON.stringify(apps)
+        value: JSON.stringify(apps),
       });
       this.appsSubject.next(apps);
     } catch (error) {
-      console.error(`Error saving apps to storage (${this.STORAGE_KEY}):`, error);
+      console.error(
+        `Error saving apps to storage (${this.STORAGE_KEY}):`,
+        error
+      );
       throw error;
     }
   }
@@ -49,24 +54,18 @@ export abstract class BaseappService<T> {
   syncWithServer(): Observable<T[]> {
     console.log(`Attempting to sync with server: ${this.API_URL}`);
 
-    return from(this.authService.getToken()).pipe(
-      switchMap(token => {
-        return from(CapacitorHttp.get({
-          url: this.API_URL,
-          headers: {
-            'Accept': 'application/json',
-            'Authorization': token ? `Bearer ${token}` : ''
-          }
-        }));
-      }),
-      map(response => {
+    return from(
+      CapacitorHttp.get({
+        url: this.API_URL,
+        headers: {
+          Accept: 'application/json',
+        },
+      })
+    ).pipe(
+      map((response) => {
         console.log('Server response:', response);
         if (response.status === 200) {
           return response.data as T[];
-        } else if (response.status === 401) {
-          // Handle unauthorized error
-          this.authService.logout(); // Force logout if token is invalid
-          throw new Error('Authentication required');
         } else {
           throw new Error(`API error: ${response.status}`);
         }
@@ -84,11 +83,13 @@ export abstract class BaseappService<T> {
           console.error('Error syncing apps:', error);
           const cachedApps = this.appsSubject.value;
           if (cachedApps.length > 0) {
-            console.info('Continuing to use cached data from last successful sync');
+            console.info(
+              'Continuing to use cached data from last successful sync'
+            );
           }
-        }
+        },
       }),
-      catchError(error => {
+      catchError((error) => {
         console.error('Error in syncWithServer:', error);
         throw error;
       })
