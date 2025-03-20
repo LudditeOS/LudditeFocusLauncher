@@ -3,6 +3,7 @@ import { catchError, map, tap } from 'rxjs/operators';
 import { Preferences } from '@capacitor/preferences';
 import { CapacitorHttp } from '@capacitor/core';
 import { Injectable } from '@angular/core';
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export abstract class BaseappService<T> {
@@ -58,6 +59,7 @@ export abstract class BaseappService<T> {
       CapacitorHttp.get({
         url: this.API_URL,
         headers: {
+          'X-API-Key': environment.apiKey,
           Accept: 'application/json',
         },
       })

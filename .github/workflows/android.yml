@@ -31,7 +31,17 @@ jobs:
           echo "${ANDROID_HOME}/build-tools/34.0.0" >> $GITHUB_PATH
 
       - name: Install Dependencies
-        run: npm install && npm run build
+        run: npm install
+
+      - name: Generate environment file with API key
+        run: |
+          echo "export const environment = {" > src/environments/environment.prod.ts
+          echo "  production: true," >> src/environments/environment.prod.ts
+          echo "  apiKey: '${{ secrets.API_KEY }}'," >> src/environments/environment.prod.ts
+          echo "};" >> src/environments/environment.prod.ts
+
+      - name: Build Angular App
+        run: npm run build
 
       - name: Sync Capacitor Plugins
         run: npx cap sync

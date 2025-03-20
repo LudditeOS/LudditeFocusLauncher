@@ -11,7 +11,7 @@ export class NativeAppListService extends BaseappService<NativeApp> {
   }
 
   protected get API_URL(): string {
-    return 'http://195.15.192.3:3000/api/nativeapps';
+    return 'https://download.luddite-os.ch/api/nativeapps';
   }
 
   constructor() {
