@@ -65,6 +65,7 @@ Thumbs.db
 # misc
 .DS_Store
 *.pem
+*ProjecStructure.md
 
 # debug
 npm-debug.log*
