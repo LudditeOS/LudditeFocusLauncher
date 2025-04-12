@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef, HostListener } from '@angular
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { InAppBrowser, DefaultWebViewOptions } from '@capacitor/inappbrowser';
+import { InAppBrowser, DefaultWebViewOptions } from '@capacitor/inapprowser';
 import { Router } from '@angular/router';
 import { AppListService } from '../../services/applist.service';
 import { App } from '../../models/app.interface';
@@ -81,8 +81,8 @@ interface AppWithSanitizedIcon extends App {
             class="group flex cursor-pointer select-none items-center rounded-md px-3 py-2 text-white hover:bg-white/10"
           >
             <div class="size-6 flex-none text-white/70" [innerHTML]="app.safeIcon"></div>
-            <span class="ml-3 flex-auto truncate">{{ app.name }}</span>
-            <span class="ml-3 flex-none text-white/70">{{ app.url }}</span>
+            <span class="ml-3 flex-auto font-medium truncate">{{ app.name }}</span>
+            <span class="ml-3 text-white/70 truncate url-display">{{ app.url }}</span>
           </li>
 
           <li *ngIf="filteredSanitizedAppList.length === 0 && searchTerm.trim()" class="p-4 text-center text-white/70">
@@ -118,6 +118,28 @@ interface AppWithSanitizedIcon extends App {
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(-10px); }
       to { opacity: 1; transform: translateY(0); }
+    }
+    /* URL display with priority to app name */
+    .url-display {
+      flex-shrink: 1;
+      flex-grow: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      min-width: 0;
+      max-width: 40%;
+    }
+
+    @media (max-width: 768px) {
+      .url-display {
+        max-width: 30%;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .url-display {
+        display: none;
+      }
     }
   `]
 })

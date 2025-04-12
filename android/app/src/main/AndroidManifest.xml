@@ -13,6 +13,7 @@
     <package android:name="me.proton.android.calendar" />
     <package android:name="me.proton.wallet.android" />
     <package android:name="ch.protonmail.android" />
+    <package android:name="net.thunderbird.android" />
 
 
   </queries>
