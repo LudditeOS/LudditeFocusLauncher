@@ -280,10 +280,13 @@ export class SearchComponent implements OnInit {
 
 
       try {
-        if(app.url == "https://teams.microsoft.com/v2/"){
+        if(app.url == "https://teams.microsoft.com/v2/" || app.url == "https://www.icloud.com/"){
+
           const desktopOptions = {
             ...DefaultWebViewOptions,
-            userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+            userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            enableViewportScale: true,
+            mobileToDesktop: true
           };
           await InAppBrowser.openInWebView({
             url: app.url,
