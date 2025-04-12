@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef, HostListener } from '@angular
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { InAppBrowser, DefaultWebViewOptions } from '@capacitor/inapprowser';
+import { InAppBrowser, DefaultWebViewOptions } from '@capacitor/inappbrowser'
 import { Router } from '@angular/router';
 import { AppListService } from '../../services/applist.service';
 import { App } from '../../models/app.interface';
