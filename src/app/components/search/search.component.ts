@@ -1,13 +1,19 @@
-import { Component, OnInit, ViewChild, ElementRef, HostListener } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { InAppBrowser, DefaultWebViewOptions } from '@capacitor/inappbrowser'
-import { Router } from '@angular/router';
-import { AppListService } from '../../services/applist.service';
-import { App } from '../../models/app.interface';
-import { trigger, state, style, animate, transition } from '@angular/animations';
-import { AppLauncher } from '@capacitor/app-launcher';
+import {Component, OnInit, ViewChild, ElementRef, HostListener} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {FormsModule} from '@angular/forms';
+import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
+import {
+  InAppBrowser,
+  DefaultWebViewOptions,
+  DefaultAndroidWebViewOptions,
+  AndroidViewStyle, DefaultAndroidSystemBrowserOptions
+} from '@capacitor/inappbrowser'
+import {Router} from '@angular/router';
+import {AppListService} from '../../services/applist.service';
+import {App} from '../../models/app.interface';
+import {trigger, state, style, animate, transition} from '@angular/animations';
+import {AppLauncher} from '@capacitor/app-launcher';
+import {WebView} from '@capacitor/core';
 
 interface AppWithSanitizedIcon extends App {
   safeIcon: SafeHtml;
@@ -62,8 +68,9 @@ interface AppWithSanitizedIcon extends App {
           class="absolute right-3 top-1/2 -translate-y-1/2 rounded-full p-1 text-white/70 hover:bg-white/10 hover:text-white focus:outline-none"
           aria-label="Clear search"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+               stroke="currentColor" class="size-5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
           </svg>
         </button>
       </div>
@@ -97,28 +104,41 @@ interface AppWithSanitizedIcon extends App {
       scrollbar-width: thin;
       scrollbar-color: rgba(255, 255, 255, 0.3) rgba(255, 255, 255, 0.1);
     }
+
     .custom-scrollbar::-webkit-scrollbar {
       width: 6px;
       display: block;
     }
+
     .custom-scrollbar::-webkit-scrollbar-track {
       background: rgba(255, 255, 255, 0.1);
       border-radius: 3px;
     }
+
     .custom-scrollbar::-webkit-scrollbar-thumb {
       background: rgba(255, 255, 255, 0.3);
       border-radius: 3px;
     }
+
     .custom-scrollbar::-webkit-scrollbar-thumb:hover {
       background: rgba(255, 255, 255, 0.5);
     }
+
     .animate-fade-in {
       animation: fadeIn 0.3s ease-in-out;
     }
+
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-10px); }
-      to { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
+
     /* URL display with priority to app name */
     .url-display {
       flex-shrink: 1;
@@ -151,15 +171,16 @@ export class SearchComponent implements OnInit {
   itemClicked = false;
   showResults = false; // Control visibility separately for animation
 
-  @ViewChild('searchContainer', { static: false }) searchContainer!: ElementRef;
-  @ViewChild('resultsPanel', { static: false }) resultsPanel!: ElementRef;
-  @ViewChild('searchInput', { static: false }) searchInput!: ElementRef;
+  @ViewChild('searchContainer', {static: false}) searchContainer!: ElementRef;
+  @ViewChild('resultsPanel', {static: false}) resultsPanel!: ElementRef;
+  @ViewChild('searchInput', {static: false}) searchInput!: ElementRef;
 
   constructor(
     private appService: AppListService,
     private sanitizer: DomSanitizer,
     private router: Router
-  ) {}
+  ) {
+  }
 
   @HostListener('document:click', ['$event'])
   handleOutsideClick(event: MouseEvent) {
@@ -273,42 +294,28 @@ export class SearchComponent implements OnInit {
   }
 
   async openApp(app: AppWithSanitizedIcon) {
-    if(app.type == "webApp"){
+    if (app.type == "webApp") {
       this.isFocused = false;
       this.showResults = false;
 
 
-
       try {
-        if(app.url == "https://teams.microsoft.com/v2/" || app.url == "https://www.icloud.com/"){
 
-          const desktopOptions = {
-            ...DefaultWebViewOptions,
-            userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-            enableViewportScale: true,
-            mobileToDesktop: true
-          };
-          await InAppBrowser.openInWebView({
-            url: app.url,
-            options: desktopOptions
-          });
-        }
+        await InAppBrowser.openInWebView({
+          url: app.url,
+          options: DefaultWebViewOptions
+        });
 
-        else{
-          await InAppBrowser.openInWebView({
-            url: app.url,
-            options: DefaultWebViewOptions
-          });
-        }
 
       } catch (error) {
         console.error('Error opening webView:', error);
       }
     }
-    if(app.type == "nativeApp"){
+    if (app.type == "nativeApp") {
       try {
         AppLauncher.openUrl({url: app.url})
-          .then(() => {})
+          .then(() => {
+          })
       } catch (error) {
         console.error('Error calling openUrl:', error);
       }
