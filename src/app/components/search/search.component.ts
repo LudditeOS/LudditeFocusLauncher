@@ -4,16 +4,13 @@ import {FormsModule} from '@angular/forms';
 import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
 import {
   InAppBrowser,
-  DefaultWebViewOptions,
-  DefaultAndroidWebViewOptions,
-  AndroidViewStyle, DefaultAndroidSystemBrowserOptions
-} from '@capacitor/inappbrowser'
+  DefaultWebViewOptions
+} from '@capacitor/inappbrowser';
 import {Router} from '@angular/router';
 import {AppListService} from '../../services/applist.service';
 import {App} from '../../models/app.interface';
 import {trigger, state, style, animate, transition} from '@angular/animations';
 import {AppLauncher} from '@capacitor/app-launcher';
-import {WebView} from '@capacitor/core';
 
 interface AppWithSanitizedIcon extends App {
   safeIcon: SafeHtml;
@@ -44,7 +41,13 @@ interface AppWithSanitizedIcon extends App {
   template: `
     <div class="relative mx-auto max-w-2xl px-4 transform transition-all duration-300 ease-in-out"
          [ngClass]="isFocused ? 'pt-16' : 'pt-[10vh]'">
-      <div class="relative" #searchContainer>
+
+      <!-- Neumorphic Search Input Container -->
+      <div
+        class="relative rounded-xl bg-slate-100 shadow-neumorphic transition-all duration-300 ease-in-out"
+        [ngClass]="{'shadow-neumorphic-inset': isFocused}"
+        #searchContainer
+      >
         <input
           type="text"
           [(ngModel)]="searchTerm"
@@ -52,47 +55,72 @@ interface AppWithSanitizedIcon extends App {
           (focus)="onFocus()"
           (blur)="handleBlur()"
           #searchInput
-          class="w-full rounded-xl bg-white/10 px-11 py-3 text-base text-white backdrop-blur-lg transition-all placeholder:text-gray-300 focus:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/20"
+          class="w-full rounded-xl bg-transparent px-11 py-4 text-base text-slate-700 transition-all placeholder:text-slate-400 focus:outline-none"
           placeholder="Search apps..."
         >
-        <svg class="pointer-events-none absolute left-3 top-1/2 size-5 -translate-y-1/2 text-white/70"
-             viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-          <path fill-rule="evenodd"
-                d="M9 3.5a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11ZM2 9a7 7 0 1 1 12.452 4.391l3.328 3.329a.75.75 0 1 1-1.06 1.06l-3.329-3.328A7 7 0 0 1 2 9Z"
-                clip-rule="evenodd"/>
+        <!-- Search Icon -->
+        <svg
+          class="pointer-events-none absolute left-4 top-1/2 size-5 -translate-y-1/2 text-slate-500"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+          aria-hidden="true"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M9 3.5a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11ZM2 9a7 7 0 1 1 12.452 4.391l3.328 3.329a.75.75 0 1 1-1.06 1.06l-3.329-3.328A7 7 0 0 1 2 9Z"
+            clip-rule="evenodd"
+          />
         </svg>
 
+        <!-- Clear Button -->
         <button
           *ngIf="searchTerm.trim()"
           (click)="clearSearch()"
-          class="absolute right-3 top-1/2 -translate-y-1/2 rounded-full p-1 text-white/70 hover:bg-white/10 hover:text-white focus:outline-none"
+          class="absolute right-4 top-1/2 -translate-y-1/2 rounded-full p-1 text-slate-500 hover:text-slate-700 hover:shadow-neumorphic-sm active:shadow-neumorphic-inset-sm focus:outline-none transition-all duration-200"
           aria-label="Clear search"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-               stroke="currentColor" class="size-5">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="size-5"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M6 18L18 6M6 6l12 12"
+            />
           </svg>
         </button>
       </div>
 
+      <!-- Results Panel -->
       <div
         *ngIf="isFocused || searchTerm.trim()"
         [@fadeAnimation]="showResults ? 'visible' : 'hidden'"
-        class="mt-8 rounded-xl bg-white/10 backdrop-blur-lg"
+        class="mt-8 rounded-xl bg-slate-100 shadow-neumorphic p-3"
         #resultsPanel
       >
-        <ul class="max-h-72 overflow-y-auto p-2 text-sm custom-scrollbar">
+        <ul class="max-h-72 overflow-y-auto text-sm custom-scrollbar">
           <li
             *ngFor="let app of filteredSanitizedAppList; trackBy: trackById"
             (mousedown)="handleItemClick(app)"
-            class="group flex cursor-pointer select-none items-center rounded-md px-3 py-2 text-white hover:bg-white/10"
+            class="group flex cursor-pointer select-none items-center rounded-lg px-4 py-3 mb-2 text-slate-700 transition-all duration-200 ease-in-out hover:bg-slate-200 hover:shadow-neumorphic-inset-sm"
           >
-            <div class="size-6 flex-none text-white/70" [innerHTML]="app.safeIcon"></div>
-            <span class="ml-3 flex-auto font-medium truncate">{{ app.name }}</span>
-            <span class="ml-3 text-white/70 truncate url-display">{{ app.url }}</span>
+            <div
+              class="size-8 flex-none rounded-lg bg-slate-100 shadow-neumorphic-sm p-1.5 text-slate-600 flex items-center justify-center"
+              [innerHTML]="app.safeIcon"
+            ></div>
+            <span class="ml-4 flex-auto font-medium truncate">{{ app.name }}</span>
+            <span class="ml-3 text-slate-500 truncate url-display">{{ app.url }}</span>
           </li>
 
-          <li *ngIf="filteredSanitizedAppList.length === 0 && searchTerm.trim()" class="p-4 text-center text-white/70">
+          <li
+            *ngIf="filteredSanitizedAppList.length === 0 && searchTerm.trim()"
+            class="p-4 text-center text-slate-500 rounded-lg bg-slate-200 shadow-neumorphic-inset-sm"
+          >
             No apps found for "{{ searchTerm }}"
           </li>
         </ul>
@@ -100,9 +128,35 @@ interface AppWithSanitizedIcon extends App {
     </div>
   `,
   styles: [`
+    /* Custom Neumorphic Shadows */
+    .shadow-neumorphic {
+      box-shadow:
+        6px 6px 12px rgba(166, 180, 200, 0.7),
+        -6px -6px 12px rgba(255, 255, 255, 0.8);
+    }
+
+    .shadow-neumorphic-inset {
+      box-shadow:
+        inset 4px 4px 8px rgba(166, 180, 200, 0.7),
+        inset -4px -4px 8px rgba(255, 255, 255, 0.8);
+    }
+
+    .shadow-neumorphic-sm {
+      box-shadow:
+        3px 3px 6px rgba(166, 180, 200, 0.6),
+        -3px -3px 6px rgba(255, 255, 255, 0.7);
+    }
+
+    .shadow-neumorphic-inset-sm {
+      box-shadow:
+        inset 2px 2px 4px rgba(166, 180, 200, 0.6),
+        inset -2px -2px 4px rgba(255, 255, 255, 0.7);
+    }
+
+    /* Custom Scrollbar */
     .custom-scrollbar {
       scrollbar-width: thin;
-      scrollbar-color: rgba(255, 255, 255, 0.3) rgba(255, 255, 255, 0.1);
+      scrollbar-color: rgba(148, 163, 184, 0.5) rgba(241, 245, 249, 0.5);
     }
 
     .custom-scrollbar::-webkit-scrollbar {
@@ -111,32 +165,17 @@ interface AppWithSanitizedIcon extends App {
     }
 
     .custom-scrollbar::-webkit-scrollbar-track {
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(241, 245, 249, 0.5);
       border-radius: 3px;
     }
 
     .custom-scrollbar::-webkit-scrollbar-thumb {
-      background: rgba(255, 255, 255, 0.3);
+      background: rgba(148, 163, 184, 0.5);
       border-radius: 3px;
     }
 
     .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-      background: rgba(255, 255, 255, 0.5);
-    }
-
-    .animate-fade-in {
-      animation: fadeIn 0.3s ease-in-out;
-    }
-
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(-10px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      background: rgba(100, 116, 139, 0.6);
     }
 
     /* URL display with priority to app name */
@@ -179,8 +218,7 @@ export class SearchComponent implements OnInit {
     private appService: AppListService,
     private sanitizer: DomSanitizer,
     private router: Router
-  ) {
-  }
+  ) {}
 
   @HostListener('document:click', ['$event'])
   handleOutsideClick(event: MouseEvent) {
@@ -197,7 +235,6 @@ export class SearchComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log('SearchComponent.ngOnInit() called');
     this.showResults = this.searchTerm.trim().length > 0;
 
     this.appService.apps$.subscribe({
@@ -298,15 +335,11 @@ export class SearchComponent implements OnInit {
       this.isFocused = false;
       this.showResults = false;
 
-
       try {
-
         await InAppBrowser.openInWebView({
           url: app.url,
           options: DefaultWebViewOptions
         });
-
-
       } catch (error) {
         console.error('Error opening webView:', error);
       }
@@ -314,8 +347,7 @@ export class SearchComponent implements OnInit {
     if (app.type == "nativeApp") {
       try {
         AppLauncher.openUrl({url: app.url})
-          .then(() => {
-          })
+          .then(() => {})
       } catch (error) {
         console.error('Error calling openUrl:', error);
       }
