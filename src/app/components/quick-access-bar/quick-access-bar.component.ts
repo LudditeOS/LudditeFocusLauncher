@@ -19,20 +19,20 @@ interface DisplayApp {
   standalone: true,
   imports: [CommonModule, NgOptimizedImage],
   template: `
-    <div class="fixed bottom-8 left-0 right-0 z-20">
-      <div class="relative mx-auto max-w-2xl px-8">
-        <div class="flex justify-between">
+    <div class="fixed bottom-12 left-0 right-0 z-20">
+      <div class="relative mx-auto max-full px-4">
+        <div class="flex justify-center gap-8">
           <div
             *ngFor="let app of displayApps"
             (click)="openApp(app)"
-            class="size-18 flex-shrink-0 flex items-center justify-center rounded-2xl transition-transform active:scale-95 cursor-pointer mx-4"
+            class="size-16 flex-shrink-0 flex items-center justify-center rounded-2xl transition-transform active:scale-95 cursor-pointer mx-4"
           >
             <img
               [ngSrc]="getCustomIconPath(app.name)"
               width="72"
               height="72"
               alt="{{app.name}}"
-              class="size-18 rounded-2xl opacity-90 filter brightness-90 contrast-90"
+              class="size-16 rounded-2xl opacity-90 filter brightness-90 contrast-90"
             />
           </div>
         </div>
