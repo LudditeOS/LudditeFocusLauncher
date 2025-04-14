@@ -153,23 +153,21 @@ export class QuickAccessBarComponent implements OnInit, OnDestroy {
   }
 
   isCustomIcon(name: string): boolean {
-    return ['Phone', 'Messaging', 'WhatsApp', 'Camera','Proton Calendar','Proton Mail','Proton Pass','Proton Wallet','Proton Drive','LudditeInstaller', "Clock"].includes(name);
+    return ['Phone', 'Messaging', 'WhatsApp', 'Camera','Proton Calendar','Proton Mail','Proton Pass','Proton Wallet','Proton Drive','LudditeInstaller'].includes(name);
   }
 
   getCustomIconPath(name: string): string {
     const iconMap: Record<string, string> = {
-      'Phone': '/assets/images/phone.png',
-      'Messaging': '/assets/images/messages.png',
-      'WhatsApp': '/assets/images/whatsapp.png',
-      'Camera': '/assets/images/camera.png',
-      'Proton Calendar': '/assets/images/calendar.png',
-      'Proton Mail': '/assets/images/mail.png',
-      'Proton Pass': '/assets/images/wallet.png',
-      'Proton Wallet': '/assets/images/wallet.png',
-      'Proton Drive': '/assets/images/drive.png',
-      'LudditeInstaller': '/assets/images/store.png',
-      'Clock': '/assets/images/clock.png',
-
+      'Phone': '/assets/images/icons8Phone.png',
+      'Messaging': '/assets/images/icons8Messages.png',
+      'WhatsApp': '/assets/images/icons8Whatsapp.png',
+      'Camera': '/assets/images/icons8Camera.png',
+      'Proton Calendar': '/assets/images/protoncalendar.svg',
+      'Proton Mail': '/assets/images/protonmail.svg',
+      'Proton Pass': '/assets/images/protonpass.svg',
+      'Proton Wallet': '/assets/images/protonwallet.svg',
+      'Proton Drive': '/assets/images/protondrive.svg',
+      'LudditeInstaller': '/assets/images/icons8Installer.png',
     };
 
     return iconMap[name] || '';
