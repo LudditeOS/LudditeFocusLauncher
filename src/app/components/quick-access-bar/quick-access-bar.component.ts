@@ -25,14 +25,14 @@ interface DisplayApp {
           <div
             *ngFor="let app of displayApps"
             (click)="openApp(app)"
-            class="size-18 flex items-center justify-center rounded-2xl transition-transform active:scale-95 cursor-pointer"
+            class="size-16 flex items-center justify-center rounded-2xl transition-transform active:scale-95 cursor-pointer"
           >
             <img
               [ngSrc]="getCustomIconPath(app.name)"
               width="64"
               height="64"
               alt="{{app.name}}"
-              class="size-18 rounded-2xl opacity-90 filter brightness-90 contrast-90"
+              class="size-16 rounded-2xl opacity-90 filter brightness-90 contrast-90"
             />
           </div>
         </div>
