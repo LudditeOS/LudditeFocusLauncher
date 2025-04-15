@@ -14,8 +14,7 @@
     <package android:name="me.proton.wallet.android" />
     <package android:name="ch.protonmail.android" />
     <package android:name="com.android.deskclock" />
-
-
+    <package android:name="io.github.quillpad" />
 
   </queries>
 
