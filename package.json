@@ -17,7 +17,7 @@
     "@angular/forms": "^19.1.0",
     "@angular/platform-browser": "^19.1.0",
     "@angular/platform-browser-dynamic": "^19.1.0",
-    "@angular/router": "^19.1.0",
+    "@angular/router": "^19.2.7",
     "@capacitor/android": "^7.0.1",
     "@capacitor/app-launcher": "^7.0.0",
     "@capacitor/cli": "^7.0.1",
@@ -33,7 +33,7 @@
     "zone.js": "~0.15.0"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^19.2.7",
+    "@angular-devkit/build-angular": "^19.2.8",
     "@angular/cli": "^19.1.8",
     "@angular/compiler-cli": "^19.1.0",
     "@types/jasmine": "~5.1.0",
