@@ -12,6 +12,7 @@ dependencies {
     implementation project(':capacitor-app-launcher')
     implementation project(':capacitor-inappbrowser')
     implementation project(':capacitor-preferences')
+    implementation project(':capacitor-toast')
 
 }
 

@@ -5,15 +5,15 @@ import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
 import {
   InAppBrowser,
   DefaultWebViewOptions,
-  DefaultAndroidWebViewOptions,
-  AndroidViewStyle, DefaultAndroidSystemBrowserOptions
 } from '@capacitor/inappbrowser'
 import {Router} from '@angular/router';
 import {AppListService} from '../../services/applist.service';
 import {App} from '../../models/app.interface';
 import {trigger, state, style, animate, transition} from '@angular/animations';
 import {AppLauncher} from '@capacitor/app-launcher';
-import {WebView} from '@capacitor/core';
+import {Toast} from '@capacitor/toast';
+import { Preferences } from '@capacitor/preferences';
+
 
 interface AppWithSanitizedIcon extends App {
   safeIcon: SafeHtml;
@@ -295,30 +295,75 @@ export class SearchComponent implements OnInit {
 
   async openApp(app: AppWithSanitizedIcon) {
     if (app.type == "webApp") {
-      this.isFocused = false;
-      this.showResults = false;
-
-
-      try {
-
-        await InAppBrowser.openInWebView({
-          url: app.url,
-          options: DefaultWebViewOptions
-        });
-
-
-      } catch (error) {
-        console.error('Error opening webView:', error);
+      if (this.IsAppAllowedToLaunch(app)) {
+        await this.launchWebApp(app);
       }
     }
+
     if (app.type == "nativeApp") {
-      try {
-        AppLauncher.openUrl({url: app.url})
-          .then(() => {
-          })
-      } catch (error) {
-        console.error('Error calling openUrl:', error);
-      }
+      await this.launchNativeApp(app);
     }
   }
+
+  IsAppAllowedToLaunch(app: AppWithSanitizedIcon): boolean{
+    if (app.timeLimit == "0") {
+      return true;
+    }
+
+    const now = new Date();
+    if (now.getHours() >= 22 || now.getHours() < 10) {
+      const showHelloToast = async () => {
+        await Toast.show({
+          text: 'You should not social media now!',
+        });
+      }
+      return false;
+    }
+
+    return true;
+  }
+
+
+  async saveTime(key: string, value: any) {
+    await Preferences.set({
+      key: key,
+      value: JSON.stringify(value)
+    });
+  }
+
+  async getTime(key: string) {
+    const { value } = await Preferences.get({ key });
+    return value ? JSON.parse(value) : null;
+  }
+
+
+  async launchNativeApp(app: AppWithSanitizedIcon) {
+    this.isFocused = false;
+    this.showResults = false;
+    try {
+      AppLauncher.openUrl({url: app.url})
+        .then(() => {
+        })
+    } catch (error) {
+      console.error('Error calling openUrl:', error);
+    }
+  }
+
+  async launchWebApp(app: AppWithSanitizedIcon) {
+
+    this.isFocused = false;
+    this.showResults = false;
+
+    try {
+      await InAppBrowser.openInWebView({
+        url: app.url,
+        options: DefaultWebViewOptions
+      });
+
+    } catch (error) {
+      console.error('Error opening webView:', error);
+    }
+  }
+
+
 }
