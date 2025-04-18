@@ -4,8 +4,7 @@ import {FormsModule} from '@angular/forms';
 import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
 import {
   InAppBrowser,
-  DefaultWebViewOptions,
-} from '@capacitor/inappbrowser'
+} from '@capgo/inappbrowser'
 import {Router} from '@angular/router';
 import {AppListService} from '../../services/applist.service';
 import {App} from '../../models/app.interface';
@@ -355,9 +354,8 @@ export class SearchComponent implements OnInit {
     this.showResults = false;
 
     try {
-      await InAppBrowser.openInWebView({
+      await InAppBrowser.openWebView({
         url: app.url,
-        options: DefaultWebViewOptions
       });
 
     } catch (error) {
