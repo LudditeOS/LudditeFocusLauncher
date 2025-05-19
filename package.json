@@ -15,7 +15,7 @@
     "@angular/compiler": "^19.1.0",
     "@angular/core": "^19.1.0",
     "@angular/forms": "^19.1.0",
-    "@angular/platform-browser": "^19.1.0",
+    "@angular/platform-browser": "^19.2.11",
     "@angular/platform-browser-dynamic": "^19.1.0",
     "@angular/router": "^19.2.7",
     "@capacitor/android": "^7.0.1",
